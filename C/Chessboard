@@ -1,0 +1,12 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int loop;
+    char array[8] = {'O','X','O','X','O','X','O','X'};
+    for(loop=0; loop<8; loop++){
+        printf("%s \n", array);
+    }
+    return 0;
+}
