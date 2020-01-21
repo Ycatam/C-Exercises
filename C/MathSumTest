@@ -19,11 +19,11 @@ int main()
     printf("Wrong answer, the correct answer is %d \n",sum);
     d++;
     }
-
-    else
+    else if(c==sum){
     printf("The answer is correct\n");
     e++;
     }
-    printf("You answer the five questions, %d is right and %d is wrong.",d,e);
+    }
+    printf("You answer the five questions, %d is wrong and %d is right.",d,e);
     return 0;
 }
