@@ -4,7 +4,7 @@
 int main()
 {
     int loop;
-    char array[8] = {'O','X','O','X','O','X','O','X'};
+    char array[9] = {'O','X','O','X','O','X','O','X'};
     for(loop=0; loop<8; loop++){
         printf("%s \n", array);
     }
