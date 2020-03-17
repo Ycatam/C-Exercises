@@ -1,1 +1,263 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define clean system("cls") //clean the board
+#define wait sleep(1) //may change according to the machine and OS
 
+
+//Quicksort function, receives the limit
+void quick_sort (int *nArray, int nLimit) {
+  int nBef, nNext, nHalf, nValAux, nAux;
+
+  //Checking the limit and using the mid value
+  if (nLimit < 2)
+    return;
+  nHalf = nArray[nLimit / 2];
+
+  //Double for, decreasing the next ant rise the before number
+  for (nBef = 0, nNext = nLimit - 1;; nBef++, nNext--) {
+    //printing the values
+    for(nAux=0;nAux<=nLimit-1;nAux++){
+      printf("[%d]",nArray[nAux]);
+      wait;
+    }
+    printf("\n");
+
+    //while minor than the half
+    while (nArray[nBef] < nHalf)
+      nBef++;
+    //while the half is minor than the next
+    while (nHalf < nArray[nNext])
+      nNext--;
+    //if the before is greater than the next, breaks the loop
+    if (nBef >= nNext)
+      break;
+
+    //switching the positions
+    nValAux = nArray[nBef];
+    nArray[nBef] = nArray[nNext];
+    nArray[nNext] = nValAux;
+  }
+
+  //using recursive
+  quick_sort(nArray, nBef);
+  quick_sort(nArray + nBef, nLimit - nBef);
+}
+
+int main(){
+  //declaring variables vector
+  int nPos=0, nAux=0;
+
+  //vector length
+  while((nPos<=0)||(nPos>100)){
+    printf("\nHow many numbers the vector will have? ");
+    scanf("%d",&nPos);
+  }
+
+  //making the vector
+  int nVector[nPos], nOrig[nPos], nOpt=-1;
+
+  //filling the vector data
+  for(nAux=0;nAux<=nPos-1;nAux++){
+    printf("\nInsert the number %d: ",nAux+1);
+    scanf("%d",&nVector[nAux]);
+    nOrig[nAux]=nVector[nAux];
+  }
+
+  //cleaning the console
+  clean;
+  while((nOpt<=0)||(nOpt>=3)){
+    printf("\n > Menu:");
+    printf("\n  1. Shell Sort");
+    printf("\n  2. Quick Sort");
+    printf("\n  3. Heap Sort");
+    printf("\n  4. Merge Sort");
+    printf("\n > Answer: ");
+    scanf("%d",&nOpt);
+  }
+  printf("\nSorting:\n");
+
+  //for Shell Sort
+  if(nOpt==1){
+    int nGap, nValAux, nNext, nActual;
+
+    //gap
+    while(nGap < (nPos-1)) {
+      nGap = 2*nGap+1;
+    }
+    //while in Gap
+    while ( nGap > 1) {
+      nGap /= 2;
+      //reading the positions
+      for(nActual = nGap; nActual < nPos; nActual++) {
+        //printing values
+        for(nAux=0;nAux<=nPos-1;nAux++){
+          printf("[%d]",nVector[nAux]);
+          wait;
+        }
+
+        //setting the value for next position
+        nValAux = nVector[nActual];
+        nNext = nActual - nGap;
+
+        //inverting the minor value of the next position
+        while (nNext >= 0 && nValAux < nVector[nNext]) {
+          nVector[nNext + nGap] = nVector[nNext];
+          nNext -= nGap;
+        }
+        nVector[nNext + nGap] = nValAux;
+        printf("\n");
+      }
+    }
+  }
+
+  //for Quick Sort
+  else if(nOpt==2){
+    quick_sort(nVector, nPos);
+  }
+
+  //Original Vector
+  printf("\nOriginal: ");
+  for(nAux=0;nAux<=nPos-1;nAux++){
+    printf("[%d]",nOrig[nAux]);
+    wait;
+  }
+
+  //Sorted Vector
+  printf("\nSorted: ");
+  for(nAux=0;nAux<=nPos-1;nAux++){
+    printf("[%d]",nVector[nAux]);
+    wait;
+  }
+
+  //press -Enter- to finish
+  getchar();
+  printf("\n\nPress -Enter- to finish!\n\n");
+  getchar();
+}
+/*
+//heap
+void peneira(int *vet, int raiz, int fundo);
+
+void heapsort(int *vet, int n) {
+	int i, tmp;
+
+	for (i = (n / 2); i >= 0; i--) {
+		peneira(vet, i, n - 1);
+	}
+
+	for (i = n-1; i >= 1; i--) {
+		tmp = vet[0];
+		vet[0] = vet[i];
+		vet[i] = tmp;
+		peneira(vet, 0, i-1);
+	}
+}
+
+void peneira(int *vet, int raiz, int fundo) {
+	int pronto, filhoMax, tmp;
+
+	pronto = 0;
+	while ((raiz*2 <= fundo) && (!pronto)) {
+		if (raiz*2 == fundo) {
+			filhoMax = raiz * 2;
+		}
+		else if (vet[raiz * 2] > vet[raiz * 2 + 1]) {
+			filhoMax = raiz * 2;
+		}
+		else {
+			filhoMax = raiz * 2 + 1;
+		}
+
+	if (vet[raiz] < vet[filhoMax]) {
+		tmp = vet[raiz];
+		vet[raiz] = vet[filhoMax];
+		vet[filhoMax] = tmp;
+		raiz = filhoMax;
+    }
+	else {
+      pronto = 1;
+	}
+  }
+}
+
+int main() {
+	int vetor[max] = {5,2,7,8,10,6,1,4,9,3};
+	int i;
+	heapsort(vetor,max);
+	for (i = 0; i < max; i++) {
+		printf("%d ", vetor[i]);
+	}
+	return(0);
+}
+
+//merge
+void merge(int *vet, int n) {
+  int mid;
+  int i, j, k;
+  int *tmp;
+
+  tmp = (int *) malloc(n * sizeof(int));
+  if (tmp == NULL) {
+  	printf("Memoria insuficiente.\n");
+    exit(1);
+  }
+
+  mid = n / 2;
+
+  i = 0;
+  j = mid;
+  k = 0;
+  while (i < mid && j < n) {
+    if (vet[i] < vet[j]) {
+      tmp[k] = vet[i];
+      i++;
+    }
+    else {
+      tmp[k] = vet[j];
+      j++;
+    }
+    k++;
+  }
+
+  if (i == mid) {
+    while (j < n) {
+      tmp[k] = vet[j];
+      j++;
+      k++;
+    }
+  }
+  else {
+    while (i < mid) {
+      tmp[k] = vet[i];
+      i++;
+      k++;
+    }
+  }
+
+  for (i = 0; i < n; ++i) {
+    vet[i] = tmp[i];
+  }
+
+  free(tmp);
+}
+
+void mergesort(int *vet, int n) {
+  int mid;
+
+  if (n > 1) {
+    mid = n / 2;
+    mergesort(vet, mid);
+    mergesort(vet + mid, n - mid);
+    merge(vet, n);
+  }
+}
+
+int main() {
+	int vetor[max] = {5,2,7,8,10,6,1,4,9,3};
+	int i;
+	mergesort(vetor,max);
+	for (i = 0; i < max; i++) {
+		printf("%d ", vetor[i]);
+	}
+	return(0);
+}*/
