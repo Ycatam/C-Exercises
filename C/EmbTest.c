@@ -17,7 +17,9 @@ void insereFim(node *LISTA);
 void insereInicio(node *LISTA);
 void exibe(node *LISTA);
 void libera(node *LISTA);
-void insere (node *LISTA);
+void inicia(node *LISTA);
+void sort(node *LISTA);
+void printLISTA(node *LISTA);
 node *retiraInicio(node *LISTA);
 node *retiraFim(node *LISTA);
 node *retira(node *LISTA);
@@ -59,10 +61,10 @@ int menu(void)
  printf("2. Exibir lista\n");
  printf("3. Adicionar node no inicio\n");
  printf("4. Adicionar node no final\n");
- printf("5. Escolher onde inserir\n");
- printf("6. Retirar do inicio\n");
- printf("7. Retirar do fim\n");
- printf("8. Escolher de onde tirar\n");
+ printf("5. Retirar do inicio\n");
+ printf("6. Retirar do fim\n");
+ printf("7. Escolher de onde tirar\n");
+ printf("8. Ordernar a lista\n");
  printf("Opcao: "); scanf("%d", &opt);
  
  return opt;
@@ -94,24 +96,25 @@ void opcao(node *LISTA, int op)
    break;
    
   case 5:
-   insere(LISTA);
-   break;
-  
-  case 6:
    tmp= retiraInicio(LISTA);
    printf("Retirado: %3d\n\n", tmp->num);
    break;
    
-  case 7:
+  case 6:
    tmp= retiraFim(LISTA);
    printf("Retirado: %3d\n\n", tmp->num);
    break;
   
-  case 8:
+  case 7:
    tmp= retira(LISTA);
    printf("Retirado: %3d\n\n", tmp->num);
    break;
   
+  case 8:
+   sort(LISTA);
+   printLISTA(LISTA);
+   break;
+
   default:
    printf("Comando invalido\n\n");
  }
@@ -182,16 +185,7 @@ void exibe(node *LISTA)
   printf("%5d", tmp->num);
   tmp = tmp->prox;
  }
- printf("\n        ");
- int count;
- for(count=0 ; count < tam ; count++)
-  printf("  ^  ");
- printf("\nOrdem:");
- for(count=0 ; count < tam ; count++)
-  printf("%5d", count+1);
- 
-  
- printf("\n\n");
+  printf("\n\n");
 }
 
 void libera(node *LISTA)
@@ -209,32 +203,49 @@ void libera(node *LISTA)
  }
 }
 
-void insere(node *LISTA)
-{
- int pos,
-  count;
- printf("Em que posicao, [de 1 ate %d] voce deseja inserir: ", tam);
- scanf("%d", &pos);
- 
- if(pos>0 && pos <= tam){
-  if(pos==1)
-   insereInicio(LISTA);
-  else{
-   node *atual = LISTA->prox,
-     *anterior=LISTA; 
-   node *novo=aloca();
-     
-   for(count=1 ; count < pos ; count++){
-     anterior=atual;
-     atual=atual->prox;
-   }
-   anterior->prox=novo;
-   novo->prox = atual;
-   tam++;
-  }
-   
- }else
-  printf("Elemento invalido\n\n");  
+void swap(struct Node *a, struct Node *b) 
+{ 
+    int temp = a->num; 
+    a->num = b->num; 
+    b->num = temp; 
+}
+
+void sort(node *LISTA) 
+{ 
+    int swapped, i; 
+    struct Node *ptr1; 
+    struct Node *lptr = NULL; 
+  
+    if (LISTA == NULL) 
+        return; 
+  
+    do
+    { 
+        swapped = 0;
+        ptr1 = LISTA; 
+  
+        while (ptr1->prox != lptr) 
+        { 
+            if (ptr1->num > ptr1->prox->num) 
+            {  
+                swap(ptr1, ptr1->prox); 
+                swapped = 1; 
+            } 
+            ptr1 = ptr1->prox; 
+        } 
+        lptr = ptr1; 
+    } 
+    while (swapped); 
+} 
+void printLISTA(node *LISTA) 
+{ 
+    struct Node *temp = LISTA; 
+    printf("\n"); 
+    while (temp!=NULL) 
+    { 
+        printf("%d ", temp->num); 
+        temp = temp->prox; 
+    } 
 }
 
 node *retiraInicio(node *LISTA)
@@ -270,6 +281,7 @@ node *retiraFim(node *LISTA)
   return ultimo;  
  }
 }
+
 
 node *retira(node *LISTA)
 {
