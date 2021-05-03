@@ -6,6 +6,23 @@
  Copyright   : 
  Description : Hello World in C, Ansi-style
  ============================================================================
+ Implemente uma lista ligada dinâmica com pelo menos os comandos: put, get, list, remove, clear, first e last.
+ Ex:
+prompt> put 3
+3
+prompt> put 7
+3 7
+prompt> get 2
+7
+prompt> first
+3
+prompt> last
+7
+prompt> remove 2
+7
+3
+Then,
+Escolha um algoritmo de ordenação e implemente a função sort na lista ligada da questão 1. O comando sort deve ordenar a lista.
  */
 
 #include <stdio.h>
@@ -30,6 +47,7 @@ node *criaNo();
 void insereInicio(node *LISTA);
 void exibe(node *LISTA);
 void libera(node *LISTA);
+void sort(node *LISTA);
 node *retiraInicio(node *LISTA);
 node *retira(node *LISTA);
 
@@ -62,6 +80,12 @@ int main(int argc, char *argv[]) {
         if (strncmp(input, "clear\n", 5) == 0) {
 			libera(LISTA);
             inicia(LISTA);
+			
+		}
+
+        if (strncmp(input, "sort\n", 5) == 0) {
+			sort(LISTA);
+            exibe(LISTA);
 			
 		}
       
@@ -210,4 +234,39 @@ node *retira(node *LISTA)
   printf("Elemento invalido\n\n");
   return NULL;
  }
+}
+
+void swap(struct Node *a, struct Node *b) 
+{ 
+    int temp = a->num; 
+    a->num = b->num; 
+    b->num = temp; 
+}
+
+void sort(node *LISTA) 
+{ 
+    int swapped, i; 
+    struct Node *ptr1; 
+    struct Node *lptr = NULL; 
+  
+    if (LISTA == NULL) 
+        return; 
+  
+    do
+    { 
+        swapped = 0;
+        ptr1 = LISTA; 
+  
+        while (ptr1->prox != lptr) 
+        { 
+            if (ptr1->num > ptr1->prox->num) 
+            {  
+                swap(ptr1, ptr1->prox); 
+                swapped = 1; 
+            } 
+            ptr1 = ptr1->prox; 
+        } 
+        lptr = ptr1; 
+    } 
+    while (swapped); 
 }
